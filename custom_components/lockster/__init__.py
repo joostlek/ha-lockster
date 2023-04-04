@@ -7,12 +7,12 @@ PLATFORMS = [Platform.SENSOR]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Twente Milieu from a config entry."""
+    """Set up Lockster from a config entry."""
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     return True
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload Twente Milieu config entry."""
+    """Unload Lockster config entry."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

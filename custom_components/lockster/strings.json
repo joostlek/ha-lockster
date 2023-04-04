@@ -11,5 +11,25 @@
     "error": {
       "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]"
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "description": "Set up Lockster by putting in your token.",
+        "data": {
+          "token": "Token"
+        }
+      }
+    }
+  },
+  "issues": {
+    "token_soon_expired": {
+      "title": "Token expires soon",
+      "description": "The token for Lockster is soon expiring. Please set it again!"
+    },
+    "token_expired": {
+      "title": "Token expired",
+      "description": "The token for Lockster is expired and thus the integration does not work. Please set it again!"
+    }
   }
 }
