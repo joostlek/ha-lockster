@@ -1,0 +1,15 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Set up Lockster by putting in your token.",
+        "data": {
+          "token": "Token"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]"
+    }
+  }
+}
