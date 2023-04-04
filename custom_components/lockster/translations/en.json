@@ -1,0 +1,53 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Set up Lockster by putting in your token.",
+        "data": {
+          "token": "Token"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "description": "Set up Lockster by putting in your token.",
+        "data": {
+          "token": "Token"
+        }
+      }
+    }
+  },
+  "issues": {
+    "token_expires": {
+      "title": "Lockster token expires soon",
+      "fix_flow": {
+        "step": {
+          "init": {
+            "description": "Repair Lockster by putting in your token.",
+            "data": {
+              "token": "Token"
+            }
+          }
+        }
+      }
+    },
+    "token_expired": {
+      "title": "Lockster token expired",
+      "fix_flow": {
+        "step": {
+          "init": {
+            "description": "Repair Lockster by putting in your token.",
+            "data": {
+              "token": "Token"
+            }
+          }
+        }
+      }
+    }
+  }
+}
