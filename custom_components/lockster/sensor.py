@@ -192,7 +192,7 @@ class LocksterData:
                 is_persistent=True,
                 severity=IssueSeverity.CRITICAL,
                 issue_domain=DOMAIN,
-                translation_key="token_expired",
+                translation_key=ISSUE_TOKEN_EXPIRED,
             )
         elif datetime.now() + timedelta(days=7) + timedelta(days=31) > expires_at:
             ir.async_create_issue(
@@ -203,5 +203,5 @@ class LocksterData:
                 is_persistent=True,
                 severity=IssueSeverity.WARNING,
                 issue_domain=DOMAIN,
-                translation_key="token_soon_expired",
+                translation_key=ISSUE_TOKEN_EXPIRES,
             )
