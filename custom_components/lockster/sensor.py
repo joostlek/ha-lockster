@@ -1,9 +1,9 @@
 """Sensors for Lockster."""
 from __future__ import annotations
-from base64 import b64decode
-from json import loads
 
-from datetime import timedelta, datetime
+from base64 import b64decode
+from datetime import datetime, timedelta
+from json import loads
 from typing import Any
 
 from aiohttp import ClientSession
@@ -17,7 +17,14 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.issue_registry import IssueSeverity
 from homeassistant.util import Throttle
 
-from .const import CONF_TOKEN, CONF_USER_ID, DOMAIN, LOGGER
+from .const import (
+    CONF_TOKEN,
+    CONF_USER_ID,
+    DOMAIN,
+    ISSUE_TOKEN_EXPIRED,
+    ISSUE_TOKEN_EXPIRES,
+    LOGGER,
+)
 
 UNIQUE_ID_TEMPLATE = "package_{0}_{1}"
 ENTITY_ID_TEMPLATE = "sensor.lockster_package_{0}"
@@ -180,20 +187,20 @@ class LocksterData:
             ir.async_create_issue(
                 self._hass,
                 DOMAIN,
-                "token_expired",
-                is_fixable=False,
-                is_persistent=False,
+                ISSUE_TOKEN_EXPIRED,
+                is_fixable=True,
+                is_persistent=True,
                 severity=IssueSeverity.CRITICAL,
                 issue_domain=DOMAIN,
                 translation_key="token_expired",
             )
-        elif datetime.now() + timedelta(days=7) > expires_at:
+        elif datetime.now() + timedelta(days=7) + timedelta(days=31) > expires_at:
             ir.async_create_issue(
                 self._hass,
                 DOMAIN,
-                "token_soon_expired",
-                is_fixable=False,
-                is_persistent=False,
+                ISSUE_TOKEN_EXPIRES,
+                is_fixable=True,
+                is_persistent=True,
                 severity=IssueSeverity.WARNING,
                 issue_domain=DOMAIN,
                 translation_key="token_soon_expired",

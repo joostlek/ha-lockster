@@ -23,13 +23,31 @@
     }
   },
   "issues": {
-    "token_soon_expired": {
-      "title": "Token expires soon",
-      "description": "The token for Lockster is soon expiring. Please set it again!"
+    "token_expires": {
+      "title": "Lockster token expires soon",
+      "fix_flow": {
+        "step": {
+          "init": {
+            "description": "Repair Lockster by putting in your token.",
+            "data": {
+              "token": "Token"
+            }
+          }
+        }
+      }
     },
     "token_expired": {
-      "title": "Token expired",
-      "description": "The token for Lockster is expired and thus the integration does not work. Please set it again!"
+      "title": "Lockster token expired",
+      "fix_flow": {
+        "step": {
+          "init": {
+            "description": "Repair Lockster by putting in your token.",
+            "data": {
+              "token": "Token"
+            }
+          }
+        }
+      }
     }
   }
 }
