@@ -194,7 +194,7 @@ class LocksterData:
                 issue_domain=DOMAIN,
                 translation_key=ISSUE_TOKEN_EXPIRED,
             )
-        elif datetime.now() + timedelta(days=7) + timedelta(days=31) > expires_at:
+        elif datetime.now() + timedelta(days=7) > expires_at:
             ir.async_create_issue(
                 self._hass,
                 DOMAIN,
