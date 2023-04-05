@@ -30,6 +30,17 @@ UNIQUE_ID_TEMPLATE = "package_{0}_{1}"
 ENTITY_ID_TEMPLATE = "sensor.lockster_package_{0}"
 
 
+def get_friendly_state_name(state):
+    """Get friendly name for state."""
+    match state:
+        case "cancelled" | "finished":
+            return state.capitalize()
+        case "reserved":
+            return "At the hub"
+        case "in_progress":
+            return "In the Lockster"
+
+
 class LocksterPackageSensor(SensorEntity):
     """Lockster sensor for individual package."""
 
@@ -38,8 +49,11 @@ class LocksterPackageSensor(SensorEntity):
     def __init__(self, data: LocksterData, package: dict) -> None:
         """Initialize sensor."""
         self._data = data
-        self._state = package["state"]
+        self._state = get_friendly_state_name(package["state"])
         self._tracking_number = package["externalID"]
+        for state in package["states"]:
+            if "locker" in state["metadata"]:
+                self._locker = state["metadata"]["locker"]
         self._friendly_name = self._tracking_number
         self.entity_id = ENTITY_ID_TEMPLATE.format(self._tracking_number)
         self._attr_unique_id = UNIQUE_ID_TEMPLATE.format(
@@ -56,12 +70,20 @@ class LocksterPackageSensor(SensorEntity):
         """Return state of package."""
         return self._state
 
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return the state attributes of the device."""
+        return {"locker": self._locker}
+
     async def async_update(self) -> None:
         """Update the sensor."""
         await self._data.async_update()
 
         package = self._data.packages.get(self._tracking_number, None)
-        self._state = package["state"]
+        self._state = get_friendly_state_name(package["state"])
+        for state in package["states"]:
+            if "locker" in state["metadata"]:
+                self._locker = state["metadata"]["locker"]
 
 
 class LocksterPickupSensor(SensorEntity):
