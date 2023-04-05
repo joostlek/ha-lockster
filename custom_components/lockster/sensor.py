@@ -73,7 +73,10 @@ class LocksterPackageSensor(SensorEntity):
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
         """Return the state attributes of the device."""
-        return {"locker": self._locker}
+        try:
+            return {"locker": self._locker}
+        except AttributeError:
+            return {}
 
     async def async_update(self) -> None:
         """Update the sensor."""
