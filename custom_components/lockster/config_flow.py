@@ -86,7 +86,7 @@ class LocksterOptionsFlowHandler(OptionsFlow, LocksterFlow):
         )
 
     async def _async_create_entry(self, title: str, data: dict[str, Any]) -> FlowResult:
-        return self.async_create_entry(title=title, data={}, options=data)
+        return self.async_create_entry(title=title, data=data)
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
