@@ -51,6 +51,7 @@ class LocksterPackageSensor(SensorEntity):
         self._data = data
         self._state = get_friendly_state_name(package["state"])
         self._tracking_number = package["externalID"]
+        self._id = package["_id"]
         for state in package["states"]:
             if "locker" in state["metadata"]:
                 self._locker = state["metadata"]["locker"]
@@ -82,7 +83,7 @@ class LocksterPackageSensor(SensorEntity):
         """Update the sensor."""
         await self._data.async_update()
 
-        package = self._data.packages.get(self._tracking_number, None)
+        package = self._data.packages.get(self._id, None)
         self._state = get_friendly_state_name(package["state"])
         for state in package["states"]:
             if "locker" in state["metadata"]:
@@ -140,12 +141,12 @@ class LocksterData:
     def __init__(
         self,
         config: ConfigEntry,
-        async_add_entites,
+        async_add_entities,
         session: ClientSession,
         hass: HomeAssistant,
     ) -> None:
         """Initialize data handler."""
-        self._async_add_entites = async_add_entites
+        self._async_add_entities = async_add_entities
         self._hass = hass
         self._config = config
         self._session = session
@@ -172,11 +173,11 @@ class LocksterData:
             )
             response_json = await response.json()
             packages = response_json["rents"]
-            new_packages = {p["externalID"]: p for p in packages}
+            new_packages = {p["_id"]: p for p in packages}
             to_add = set(new_packages) - set(self.packages)
             if to_add:
                 LOGGER.debug("Will add new tracking numbers: %s", to_add)
-                self._async_add_entites(
+                self._async_add_entities(
                     [
                         LocksterPackageSensor(self, new_packages[tracking_number])
                         for tracking_number in to_add
@@ -200,7 +201,7 @@ class LocksterData:
             if self.first_update:
                 self.first_update = False
 
-                self._async_add_entites([LocksterPickupSensor(self, self.count)])
+                self._async_add_entities([LocksterPickupSensor(self, self.count)])
         except Exception as err:  # pylint: disable=broad-except
             LOGGER.exception(err)
 
