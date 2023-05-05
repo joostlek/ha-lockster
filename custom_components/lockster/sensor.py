@@ -161,13 +161,13 @@ class LocksterData:
         await self._async_check_token()
 
     def _headers(self) -> dict:
-        return {"Authorization": f"Bearer {self._config.data[CONF_TOKEN]}"}
+        return {"Authorization": f"Bearer {self._config.options[CONF_TOKEN]}"}
 
     async def _async_update_packages(self):
         try:
             response = await self._session.request(
                 "GET",
-                f"https://api.lockster.bloq.it/api/v1/rent/list?userID={self._config.data[CONF_USER_ID]}",
+                f"https://api.lockster.bloq.it/api/v1/rent/list?userID={self._config.options[CONF_USER_ID]}",
                 headers=self._headers(),
             )
             response_json = await response.json()
@@ -190,7 +190,7 @@ class LocksterData:
         try:
             response = await self._session.request(
                 "GET",
-                f"https://api.lockster.bloq.it/api/v1/rent/count?userID={self._config.data[CONF_USER_ID]}",
+                f"https://api.lockster.bloq.it/api/v1/rent/count?userID={self._config.options[CONF_USER_ID]}",
                 headers=self._headers(),
             )
             response_json = await response.json()
@@ -205,7 +205,7 @@ class LocksterData:
             LOGGER.exception(err)
 
     async def _async_check_token(self):
-        token: str = self._config.data[CONF_TOKEN]
+        token: str = self._config.options[CONF_TOKEN]
         payload: dict[str, Any] = loads(b64decode(token.split(".")[1] + "==").decode())
         expires_at: datetime = datetime.fromtimestamp(payload["exp"])
         if datetime.now() > expires_at:
